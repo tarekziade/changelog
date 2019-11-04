@@ -1,4 +1,3 @@
-
 def get_changelog():
     data = [
         {"label": "Item 1"},
