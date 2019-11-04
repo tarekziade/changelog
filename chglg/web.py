@@ -21,7 +21,7 @@ async def index(request):
 
 @routes.get("/timeline")
 async def timeline(request):
-    data = {"changelog": db.get_changelog()}
+    data = {"changelog": list(db.get_changelog())}
     return web.json_response(data)
 
 
