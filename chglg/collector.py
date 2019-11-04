@@ -47,6 +47,7 @@ class GitHub:
                 "date": commit["commit"]["author"]["date"],
                 "author": commit["commit"]["author"]["name"],
                 "message": message,
+                "sha": commit["sha"],
             }
 
 
@@ -58,16 +59,20 @@ readers = {"github": GitHub()}
 filters = {"deployment": deployment}
 
 
-db = Database()
+def main():
+    db = Database()
+    for repo_info in CFG["repositories"]:
+        source = dict(repo_info["source"])
+        reader = readers.get(source["type"])
+        if not reader:
+            raise NotImplementedError(source["type"])
+        source["filters"] = [filters[name] for name in source["filters"]]
 
-for repo_info in CFG["repositories"]:
-    source = dict(repo_info["source"])
-    reader = readers.get(source["type"])
-    if not reader:
-        raise NotImplementedError(source["type"])
-    source["filters"] = [filters[name] for name in source["filters"]]
+        for commit in reader.get_commits(**source):
+            commit.update(repo_info["metadata"])  # XXX duplicated for now
+            if db.add_change(commit):
+                print("%(date)s - %(message)s [%(author)s]" % commit)
 
-    for commit in reader.get_commits(**source):
-        commit.update(repo_info["metadata"])  # XXX duplicated for now
-        db.add_change(commit)
-        print("%(date)s - %(message)s [%(author)s]" % commit)
+
+if __name__ == "__main__":
+    main()
