@@ -4,6 +4,9 @@ import github3
 import json
 import os
 
+from chglg.db import Database
+
+
 CFG = os.path.join(os.path.dirname(__file__), "repositories.json")
 
 with open(CFG) as f:
@@ -55,6 +58,8 @@ readers = {"github": GitHub()}
 filters = {"deployment": deployment}
 
 
+db = Database()
+
 for repo_info in CFG["repositories"]:
     repo_info["filters"] = [filters[name] for name in repo_info["filters"]]
     reader = readers.get(repo_info["type"])
@@ -62,4 +67,5 @@ for repo_info in CFG["repositories"]:
         raise NotImplementedError(repo_info["type"])
 
     for commit in reader.get_commits(**repo_info):
+        db.add_change(commit)
         print("%(date)s - %(message)s [%(author)s]" % commit)

@@ -23,11 +23,24 @@
   </div>
   <div class="ui main text container">
     <h1 class="ui header">Changelog</h1>
-    <ul>
+    <table class="ui celled table">
+  <thead>
+    <tr>
+      <th>When</th>
+      <th>What</th>
+      <th>Who</th>
+    </tr>
+  </thead>
+  <tbody>
     {% for change in changelog %}
-    <li>{{change.label}}</li>
+    <tr>
+      <td>{{change.date_str}}</td> 
+      <td>{{change.message}}</td>
+      <td>{{change.author}}</td>
+    </tr>
     {% endfor %}
-    </ul>
+    </tbody>
+    </table>
   </div>
 
   <div class="ui inverted vertical footer segment">

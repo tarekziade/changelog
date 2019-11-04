@@ -4,8 +4,10 @@ from aiohttp import web
 import aiohttp_jinja2
 import jinja2
 
-from chglg import db
+from chglg.db import Database
 
+
+db = Database()
 routes = web.RouteTableDef()
 HERE = os.path.dirname(__file__)
 STATIC = os.path.join(HERE, "static")

@@ -1,6 +1,13 @@
 from setuptools import setup, find_packages
 
-install_requires = ["aiohttp", "jinja2", "aiohttp_jinja2", "github3.py"]
+install_requires = [
+    "aiohttp",
+    "jinja2",
+    "aiohttp_jinja2",
+    "github3.py",
+    "tinydb",
+    "humanize",
+]
 
 
 setup(
