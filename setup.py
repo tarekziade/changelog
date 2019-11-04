@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-install_requires = []
+install_requires = ["aiohttp", "jinja2", "aiohttp_jinja2"]
 
 
 setup(
