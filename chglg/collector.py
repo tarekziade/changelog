@@ -61,11 +61,13 @@ filters = {"deployment": deployment}
 db = Database()
 
 for repo_info in CFG["repositories"]:
-    repo_info["filters"] = [filters[name] for name in repo_info["filters"]]
-    reader = readers.get(repo_info["type"])
+    source = dict(repo_info["source"])
+    reader = readers.get(source["type"])
     if not reader:
-        raise NotImplementedError(repo_info["type"])
+        raise NotImplementedError(source["type"])
+    source["filters"] = [filters[name] for name in source["filters"]]
 
-    for commit in reader.get_commits(**repo_info):
+    for commit in reader.get_commits(**source):
+        commit.update(repo_info["metadata"])  # XXX duplicated for now
         db.add_change(commit)
         print("%(date)s - %(message)s [%(author)s]" % commit)
