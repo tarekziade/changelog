@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-install_requires = ["aiohttp", "jinja2", "aiohttp_jinja2"]
+install_requires = ["aiohttp", "jinja2", "aiohttp_jinja2", "github3.py"]
 
 
 setup(

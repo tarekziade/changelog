@@ -1,0 +1,11 @@
+{
+    "repositories": [
+    {
+      "repository": "OpenCloudConfig",
+      "type": "github",
+      "user": "mozilla-releng",
+      "items": 10,
+      "filters": ["deployment"]
+    }
+    ]
+}
