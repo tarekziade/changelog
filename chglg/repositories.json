@@ -1,19 +1,21 @@
 {
     "repositories": [
-    {
-      "source": {
-         "repository": "OpenCloudConfig",
-         "type": "github",
-         "user": "mozilla-releng",
-         "items": 10,
-         "filters": ["deployment"]
-      },
-      "metadata": {
-        "project": "OCC",
-        "description": "Tool for creating Windows cloud",
-        "owner": "Release Engineering",
-        "url": "https://github.com/mozilla-releng/OpenCloudConfig"
-      }
-    }
+        {
+            "metadata": {
+                "description": "Tool for creating Windows cloud",
+                "owner": "Release Engineering",
+                "project": "OCC",
+                "url": "https://github.com/mozilla-releng/OpenCloudConfig"
+            },
+            "source": {
+                "filters": [
+                    "deployment"
+                ],
+                "items": 10,
+                "repository": "OpenCloudConfig",
+                "type": "github",
+                "user": "mozilla-releng"
+            }
+        }
     ]
 }
