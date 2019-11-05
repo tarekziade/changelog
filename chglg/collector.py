@@ -40,11 +40,11 @@ class GitHub:
 
         for release in repo.releases(number=kw.get("number", 25)):
             release = json.loads(release.as_json())
-
+            name = release["name"] or release["tag_name"]
             yield {
                 "date": release["published_at"],
                 "author": release["author"]["login"],
-                "message": "Released " + release["name"],
+                "message": "Released " + name,
                 "id": release["id"],
                 "type": "release",
             }
