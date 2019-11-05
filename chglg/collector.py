@@ -74,8 +74,15 @@ def only_releases(change):
     return change["type"] == "release"
 
 
+def remove_auto_commits(change):
+    message = change["message"]
+    start_text = ("Scheduled weekly dependency update",
+                  "Merge pull request")
+    return not message.startswith(start_text)
+
 readers = {"github": GitHub()}
-filters = {"deployment": deployment, "only_releases": only_releases}
+filters = {"deployment": deployment, "only_releases": only_releases,
+           "remove_auto_commits":remove_auto_commits}
 
 
 def main():

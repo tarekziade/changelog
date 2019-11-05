@@ -19,6 +19,23 @@
         },
         {
             "metadata": {
+                "description": "Tool for creating Windows cloud",
+                "owner": "Release Engineering",
+                "project": "Build Puppet",
+                "url": "https://github.com/mozilla-releng/build-puppet"
+            },
+            "source": {
+                "filters": [
+                    "remove_auto_commits"
+                ],
+                "items": 10,
+                "repository": "build-puppet",
+                "type": "github",
+                "user": "mozilla-releng"
+            }
+        },
+        {
+            "metadata": {
                 "description": "Framework that supports Mozilla's continuous integration and release processes.",
                 "owner": "Release Engineering",
                 "project": "TaskCluster",
