@@ -27,18 +27,18 @@
   <thead>
     <tr>
       <th>When</th>
+      <th>Project</th>
       <th>What</th>
       <th>Who</th>
-      <th>Project</th>
     </tr>
   </thead>
   <tbody>
     {% for change in changelog %}
     <tr>
       <td>{{change.date_str}}</td>
+      <td><a href="{{change.url}}">{{change.project}}</a></td>
       <td>{{change.message}}</td>
       <td>{{change.author}}</td>
-      <td><a href="{{change.url}}">{{change.project}}</a></td>
     </tr>
     {% endfor %}
     </tbody>

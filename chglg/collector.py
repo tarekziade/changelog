@@ -13,6 +13,13 @@ with open(CFG) as f:
     CFG = json.loads(f.read())
 
 
+def filter_out(filters, message):
+    for filter in filters:
+        if filter(message):
+            return False
+    return True
+
+
 class GitHub:
     def __init__(self):
         self.token = os.environ["GITHUB_TOKEN"]
@@ -27,36 +34,48 @@ class GitHub:
             code = input("Enter 2FA code: ")
         return code
 
-    def get_commits(self, user, repository, **kw):
+    def get_changes(self, user, repository, **kw):
         repo = self.gh.repository(user, repository)
         filters = kw.get("filters")
 
-        def filter_out(message):
-            for filter in filters:
-                if filter(message):
-                    return False
-            return True
+        for release in repo.releases(number=kw.get("number", 25)):
+            release = json.loads(release.as_json())
+
+            yield {
+                "date": release["published_at"],
+                "author": release["author"]["login"],
+                "message": "Released " + release["name"],
+                "id": release["id"],
+                "type": "release",
+            }
 
         for commit in repo.commits(number=kw.get("number", 25)):
             commit = json.loads(commit.as_json())
             message = commit["commit"]["message"]
-            if filter_out(message):
-                continue
             message = message.split("\n")[0]
-            yield {
+            res = {
                 "date": commit["commit"]["author"]["date"],
                 "author": commit["commit"]["author"]["name"],
                 "message": message,
-                "sha": commit["sha"],
+                "id": commit["sha"],
+                "type": "commit",
             }
+            if filter_out(filters, res):
+                continue
+            yield res
 
 
-def deployment(message):
+def deployment(change):
+    message = change["message"]
     return "*PRODUCTION*" in message or "*STAGING*" in message
 
 
+def only_releases(change):
+    return change["type"] == "release"
+
+
 readers = {"github": GitHub()}
-filters = {"deployment": deployment}
+filters = {"deployment": deployment, "only_releases": only_releases}
 
 
 def main():
@@ -68,10 +87,10 @@ def main():
             raise NotImplementedError(source["type"])
         source["filters"] = [filters[name] for name in source["filters"]]
 
-        for commit in reader.get_commits(**source):
-            commit.update(repo_info["metadata"])  # XXX duplicated for now
-            if db.add_change(commit):
-                print("%(date)s - %(message)s [%(author)s]" % commit)
+        for change in reader.get_changes(**source):
+            change.update(repo_info["metadata"])  # XXX duplicated for now
+            if db.add_change(change):
+                print("%(date)s - %(message)s [%(author)s]" % change)
 
 
 if __name__ == "__main__":

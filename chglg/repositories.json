@@ -16,6 +16,23 @@
                 "type": "github",
                 "user": "mozilla-releng"
             }
+        },
+        {
+            "metadata": {
+                "description": "Framework that supports Mozilla's continuous integration and release processes.",
+                "owner": "Release Engineering",
+                "project": "TaskCluster",
+                "url": "https://github.com/taskcluster/taskcluster"
+            },
+            "source": {
+                "filters": [
+                    "only_releases"
+                ],
+                "items": 10,
+                "repository": "taskcluster",
+                "type": "github",
+                "user": "taskcluster"
+            }
         }
     ]
 }
