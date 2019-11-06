@@ -33,8 +33,7 @@ class Database:
         changes = []
         for line in self.changes:
             d = datetime.datetime.strptime(line["date"], "%Y-%m-%dT%H:%M:%SZ")
-            line["real_date"] = d
             line["date_str"] = humanize.naturalday(d)
-            changes.append(line)
-        changes.sort(key=lambda c: c["real_date"])
-        return reversed(changes)
+            changes.append((d, line))
+        changes.sort()
+        return reversed([change for _, change in changes])
