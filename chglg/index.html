@@ -36,7 +36,7 @@
     {% for change in changelog %}
     <tr>
       <td>{{change.date_str}}</td>
-      <td><a href="{{change.url}}">{{change.project}}</a></td>
+      <td>{{change.project}}</td>
       <td>
         <a href="/change/{{change.id}}">
           {{change.message}}
