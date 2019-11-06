@@ -53,4 +53,4 @@ def make_app():
 
 
 if __name__ == "__main__":
-    web.run_app(make_app())
+    web.run_app(make_app(), port=8080)
