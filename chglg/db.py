@@ -38,9 +38,19 @@ class Database:
             res["date_str"] = humanize.naturalday(d)
         return res
 
-    def get_changelog(self):
+    def get_changelog(self, **filters):
+        # limited set of supported filters
+        def has_tag(tags, tag):
+            return tag in tags
+
+        Change = Query()
+        if "tag" in filters:
+            res = self.changes.search(Change.tags.test(has_tag, filters['tag']))
+        else:
+            res = self.changes
+
         changes = []
-        for line in self.changes:
+        for line in res:
             d = datetime.datetime.strptime(line["date"], "%Y-%m-%dT%H:%M:%SZ")
             line["date_str"] = humanize.naturalday(d)
             changes.append((d, line))

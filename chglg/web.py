@@ -16,10 +16,10 @@ STATIC = os.path.join(HERE, "static")
 @routes.get("/")
 @aiohttp_jinja2.template("index.html")
 async def index(request):
-    return {"changelog": db.get_changelog()}
+    return {"changelog": db.get_changelog(**dict(request.query))}
 
 
-@routes.get(r'/change/{id}')
+@routes.get(r"/change/{id}")
 @aiohttp_jinja2.template("change.html")
 async def change(request):
     try:
@@ -29,7 +29,7 @@ async def change(request):
     return {"change": db.get_change(change_id)}
 
 
-@routes.get(r'/change/{id}/json')
+@routes.get(r"/change/{id}/json")
 async def change_json(request):
     try:
         change_id = int(request.match_info["id"])
@@ -40,7 +40,7 @@ async def change_json(request):
 
 @routes.get("/json")
 async def json_index(request):
-    data = {"changelog": list(db.get_changelog())}
+    data = {"changelog": list(db.get_changelog(**dict(request.query)))}
     return web.json_response(data)
 
 

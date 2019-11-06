@@ -5,19 +5,13 @@ import json
 import os
 
 from chglg.db import Database
+from chglg.filters import filter_out
 
 
 CFG = os.path.join(os.path.dirname(__file__), "repositories.json")
 
 with open(CFG) as f:
     CFG = json.loads(f.read())
-
-
-def filter_out(filters, message):
-    for filter in filters:
-        if filter(message):
-            return False
-    return True
 
 
 class GitHub:
@@ -60,29 +54,12 @@ class GitHub:
                 "id": commit["sha"],
                 "type": "commit",
             }
-            if filter_out(filters, res):
-                continue
-            yield res
+            res = filter_out(kw.get("filters"), res)
+            if res:
+                yield res
 
-
-def deployment(change):
-    message = change["message"]
-    return "*PRODUCTION*" in message or "*STAGING*" in message
-
-
-def only_releases(change):
-    return change["type"] == "release"
-
-
-def remove_auto_commits(change):
-    message = change["message"]
-    start_text = ("Scheduled weekly dependency update",
-                  "Merge pull request")
-    return not message.startswith(start_text)
 
 readers = {"github": GitHub()}
-filters = {"deployment": deployment, "only_releases": only_releases,
-           "remove_auto_commits":remove_auto_commits}
 
 
 def main():
@@ -92,7 +69,6 @@ def main():
         reader = readers.get(source["type"])
         if not reader:
             raise NotImplementedError(source["type"])
-        source["filters"] = [filters[name] for name in source["filters"]]
 
         for change in reader.get_changes(**source):
             change.update(repo_info["metadata"])  # XXX duplicated for now
