@@ -19,8 +19,27 @@ async def index(request):
     return {"changelog": db.get_changelog()}
 
 
-@routes.get("/timeline")
-async def timeline(request):
+@routes.get(r'/change/{id}')
+@aiohttp_jinja2.template("change.html")
+async def change(request):
+    try:
+        change_id = int(request.match_info["id"])
+    except ValueError:
+        change_id = request.match_info["id"]
+    return {"change": db.get_change(change_id)}
+
+
+@routes.get(r'/change/{id}/json')
+async def change_json(request):
+    try:
+        change_id = int(request.match_info["id"])
+    except ValueError:
+        change_id = request.match_info["id"]
+    return web.json_response({"change": db.get_change(change_id)})
+
+
+@routes.get("/json")
+async def json_index(request):
     data = {"changelog": list(db.get_changelog())}
     return web.json_response(data)
 

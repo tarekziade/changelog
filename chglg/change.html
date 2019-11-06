@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Changelog</title>
+  <title>Change</title>
   <link rel="stylesheet" type="text/css" href="/static/semantic.min.css">
   <link rel="stylesheet" type="text/css" href="/static/changelog.css">
 </head>
@@ -12,41 +12,22 @@
 
   <div class="ui fixed inverted menu">
     <div class="ui container">
-      <a href="#" class="header item">
+      <a href="/" class="header item">
         Changelog
       </a>
-      <a href="/json" class="header right item">
-        JSON
+      <a href="/change/{{change.id}}/json" class="header right item">
+        JSON for this change
       </a>
 
     </div>
   </div>
   <div class="ui main text container">
-    <h1 class="ui header">Changelog</h1>
-    <table class="ui celled table">
-  <thead>
-    <tr>
-      <th>When</th>
-      <th>Project</th>
-      <th>What</th>
-      <th>Who</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for change in changelog %}
-    <tr>
-      <td>{{change.date_str}}</td>
-      <td><a href="{{change.url}}">{{change.project}}</a></td>
-      <td>
-        <a href="/change/{{change.id}}">
-          {{change.message}}
-        </a>
-      </td>
-      <td>{{change.author}}</td>
-    </tr>
+    <h1 class="ui header">{{change.project}}: {{change.message}}</h1>
+    <ul>
+    {% for k, v in change.items()|sort %}
+      <li><strong>{{k}}</strong>: {{ v }}</li>
     {% endfor %}
-    </tbody>
-    </table>
+    </ul>
   </div>
 
   <div class="ui inverted vertical footer segment">

@@ -29,6 +29,15 @@ class Database:
                 added += 1
         return added
 
+    def get_change(self, change_id):
+        Change = Query()
+        res = self.changes.search(Change.id == change_id)
+        res = len(res) == 1 and res[0] or None
+        if res:
+            d = datetime.datetime.strptime(res["date"], "%Y-%m-%dT%H:%M:%SZ")
+            res["date_str"] = humanize.naturalday(d)
+        return res
+
     def get_changelog(self):
         changes = []
         for line in self.changes:
