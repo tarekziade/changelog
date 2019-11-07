@@ -32,10 +32,12 @@ class GitHub:
     def get_changes(self, user, repository, **kw):
         repo = self.gh.repository(user, repository)
         filters = kw.get("filters")
+
         gh_options = {"number": kw.get("number", MAX_ITEMS)}
 
         for release in repo.releases(**gh_options):
             release = json.loads(release.as_json())
+            release["files"] = []
             # no "since" option for releases() we filter manually here
             if "since" in kw and release["published_at"] <= kw["since"]:
                 continue
@@ -54,6 +56,13 @@ class GitHub:
 
         for commit in repo.commits(**gh_options):
             commit = json.loads(commit.as_json())
+            # ugly XXX
+            if filters:
+                for filter in filters:
+                    if isinstance(filter, list) and filter[0] == "filter_by_path":
+                        commit["files"] = repo.commit(commit["sha"]).files
+                        break
+
             message = commit["commit"]["message"]
             message = message.split("\n")[0]
             res = {
@@ -63,8 +72,9 @@ class GitHub:
                 "id": commit["sha"],
                 "type": "commit",
                 "url": commit["html_url"],
+                "files": [f["filename"] for f in commit.get("files", [])],
             }
-            res = filter_out(kw.get("filters"), res)
+            res = filter_out(filters, res)
             if res:
                 yield res
 

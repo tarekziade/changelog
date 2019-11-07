@@ -104,6 +104,25 @@
                 "type": "github",
                 "user": "taskcluster"
             }
+        },
+        {
+            "metadata": {
+                "description": "Simple implementation of a test run manager for mozilla tests at bitbar.",
+                "owner": "Bob Clary",
+                "project": "Bitbar device pool",
+                "project_url": "https://github.com/bclary/mozilla-bitbar-devicepool/"
+            },
+            "source": {
+                "filters": [
+                ],
+                "items": 10,
+                "repository": "mozilla-bitbar-devicepool",
+                "type": "github",
+                "user": "bclary",
+                "filters": [
+                  ["filter_by_path", "config/config.yml"]
+                ]
+            }
         }
     ]
 }
