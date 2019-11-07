@@ -13,6 +13,18 @@ class Database:
         self.path = path
         self.db = TinyDB(path)
         self.changes = self.db.table("changes")
+        self.last_check_file = path + ".lastcheck"
+        if not os.path.exists(self.last_check_file):
+            # if we're syncing for the first time, we go 50 days in the past
+            self.last_check_date = self._get_date(50)
+        else:
+            with open(self.last_check_file) as f:
+                self.last_check_date = f.read()
+
+    def _get_date(self, days):
+        now = datetime.datetime.now()
+        then = now - datetime.timedelta(days=days)
+        return then.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     def add_change(self, change):
         # XXXX slow, will do better later
@@ -45,7 +57,7 @@ class Database:
 
         Change = Query()
         if "tag" in filters:
-            res = self.changes.search(Change.tags.test(has_tag, filters['tag']))
+            res = self.changes.search(Change.tags.test(has_tag, filters["tag"]))
         else:
             res = self.changes
 
@@ -56,3 +68,7 @@ class Database:
             changes.append((d, line))
         changes.sort()
         return reversed([change for _, change in changes])
+
+    def updated(self):
+        with open(self.last_check_file, "w") as f:
+            f.write(self._get_date(0))
