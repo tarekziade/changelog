@@ -1,4 +1,5 @@
 import os
+import json
 
 from aiohttp import web
 import aiohttp_jinja2
@@ -11,6 +12,21 @@ db = Database()
 routes = web.RouteTableDef()
 HERE = os.path.dirname(__file__)
 STATIC = os.path.join(HERE, "static")
+
+
+@routes.get("/watchlist")
+@aiohttp_jinja2.template("watchlist.html")
+async def index(request):
+    with open(os.path.join(HERE, "repositories.json")) as f:
+        config = json.loads(f.read())
+    return config
+
+
+@routes.get("/watchlist/json")
+async def index(request):
+    with open(os.path.join(HERE, "repositories.json")) as f:
+        config = json.loads(f.read())
+    return web.json_response(config)
 
 
 @routes.get("/")
