@@ -55,17 +55,35 @@ class Database:
         def has_tag(tags, tag):
             return tag in tags
 
+        def _since(date, since):
+            return date >= since
+
+        def _until(date, until):
+            return date <= until
+
         Change = Query()
+        query = []
         if "tag" in filters:
-            res = self.changes.search(Change.tags.test(has_tag, filters["tag"]))
-        else:
+            query.append(Change.tags.test(has_tag, filters["tag"]))
+        if "since" in filters:
+            query.append(Change.date.test(_since, filters["since"]))
+        if "until" in filters:
+            query.append(Change.date.test(_until, filters["until"]))
+
+        if query == []:
             res = self.changes
+        else:
+            fquery = query[0]
+            for q in query[1:]:
+                fquery = fquery & q
+            res = self.changes.search(fquery)
 
         changes = []
         for line in res:
             d = datetime.datetime.strptime(line["date"], "%Y-%m-%dT%H:%M:%SZ")
             line["date_str"] = humanize.naturalday(d)
             changes.append((d, line))
+
         changes.sort()
         return reversed([change for _, change in changes])
 
