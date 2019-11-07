@@ -5,7 +5,7 @@
                 "description": "Tool for creating Windows cloud",
                 "owner": "Release Engineering",
                 "project": "OCC",
-                "url": "https://github.com/mozilla-releng/OpenCloudConfig"
+                "project_url": "https://github.com/mozilla-releng/OpenCloudConfig"
             },
             "source": {
                 "filters": [
@@ -22,7 +22,7 @@
                 "description": "Tool for creating Windows cloud",
                 "owner": "Release Engineering",
                 "project": "Build Puppet",
-                "url": "https://github.com/mozilla-releng/build-puppet"
+                "project_url": "https://github.com/mozilla-releng/build-puppet"
             },
             "source": {
                 "filters": [
@@ -39,7 +39,7 @@
                 "description": "Framework that supports Mozilla's continuous integration and release processes.",
                 "owner": "Release Engineering",
                 "project": "TaskCluster",
-                "url": "https://github.com/taskcluster/taskcluster"
+                "project_url": "https://github.com/taskcluster/taskcluster"
             },
             "source": {
                 "filters": [
@@ -57,7 +57,7 @@
                 "description": "Docker task host for linux",
                 "owner": "Release Engineering",
                 "project": "Docker Worker",
-                "url": "https://github.com/taskcluster/docker-worker"
+                "project_url": "https://github.com/taskcluster/docker-worker"
             },
             "source": {
                 "filters": [
@@ -75,7 +75,7 @@
                 "description": "A generic worker for TaskCluster, written in go",
                 "owner": "Release Engineering",
                 "project": "Generic Worker",
-                "url": "https://github.com/taskcluster/generic-worker"
+                "project_url": "https://github.com/taskcluster/generic-worker"
             },
             "source": {
                 "filters": [
@@ -93,7 +93,7 @@
                 "description": "Taskcluster authentication proxy",
                 "owner": "Release Engineering",
                 "project": "Taskcluster Proxy",
-                "url": "https://github.com/taskcluster/taskcluster-proxy"
+                "project_url": "https://github.com/taskcluster/taskcluster-proxy"
             },
             "source": {
                 "filters": [

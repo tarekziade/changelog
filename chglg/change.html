@@ -25,7 +25,11 @@
     <h1 class="ui header">{{change.project}}: {{change.message}}</h1>
     <ul>
     {% for k, v in change.items()|sort %}
-      <li><strong>{{k}}</strong>: {{ v }}</li>
+      {% if k == "url" %}
+      <li><strong>{{k}}</strong>: <a href="{{v}}">{{v}}</a></li>
+      {% else %}
+      <li><strong>{{k}}</strong>: {{v}}</li>
+      {% endif %}
     {% endfor %}
     </ul>
   </div>

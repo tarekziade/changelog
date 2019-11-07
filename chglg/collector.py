@@ -46,6 +46,7 @@ class GitHub:
                 "message": "Released " + name,
                 "id": release["id"],
                 "type": "release",
+                "url": release["html_url"],
             }
 
         if "since" in kw:
@@ -61,6 +62,7 @@ class GitHub:
                 "message": message,
                 "id": commit["sha"],
                 "type": "commit",
+                "url": commit["html_url"],
             }
             res = filter_out(kw.get("filters"), res)
             if res:
