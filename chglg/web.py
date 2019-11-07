@@ -14,8 +14,26 @@ HERE = os.path.dirname(__file__)
 STATIC = os.path.join(HERE, "static")
 
 
+def add_context(webview):
+    async def _add_context(request):
+        res = await webview(request)
+        path = request.rel_url.path
+        if path == "/":
+            url = "/json"
+        else:
+            url = path + "/json"
+        if request.rel_url.raw_query_string:
+            url += "?" + request.rel_url.raw_query_string
+        # fragment... XXX
+        res["json_url"] = url
+        return res
+
+    return _add_context
+
+
 @routes.get("/watchlist")
 @aiohttp_jinja2.template("watchlist.html")
+@add_context
 async def index(request):
     with open(os.path.join(HERE, "repositories.json")) as f:
         config = json.loads(f.read())
@@ -31,12 +49,14 @@ async def index(request):
 
 @routes.get("/")
 @aiohttp_jinja2.template("index.html")
+@add_context
 async def index(request):
     return {"changelog": db.get_changelog(**dict(request.query))}
 
 
 @routes.get(r"/change/{id}")
 @aiohttp_jinja2.template("change.html")
+@add_context
 async def change(request):
     try:
         change_id = int(request.match_info["id"])
