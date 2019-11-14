@@ -81,19 +81,21 @@ async def json_index(request):
     return web.json_response(data)
 
 
+CORS_DEFAULTS = {
+    "*": aiohttp_cors.ResourceOptions(
+        allow_credentials=True, expose_headers="*", allow_headers="*"
+    )
+}
+
+
 def make_app():
     app = web.Application()
     app.add_routes(routes)
     aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(HERE))
     app.add_routes([web.static("/static", STATIC)])
-    aiohttp_cors.setup(
-        app,
-        defaults={
-            "*": aiohttp_cors.ResourceOptions(
-                allow_credentials=True, expose_headers="*", allow_headers="*"
-            )
-        },
-    )
+    cors = aiohttp_cors.setup(app, defaults=CORS_DEFAULTS)
+    for route in list(app.router.routes()):
+        cors.add(route)
     return app
 
 
