@@ -4,6 +4,7 @@ import json
 from aiohttp import web
 import aiohttp_jinja2
 import jinja2
+import aiohttp_cors
 
 from chglg.db import Database
 
@@ -34,14 +35,14 @@ def add_context(webview):
 @routes.get("/watchlist")
 @aiohttp_jinja2.template("watchlist.html")
 @add_context
-async def index(request):
+async def watchlist(request):
     with open(os.path.join(HERE, "repositories.json")) as f:
         config = json.loads(f.read())
     return config
 
 
 @routes.get("/watchlist/json")
-async def index(request):
+async def watchlist_json(request):
     with open(os.path.join(HERE, "repositories.json")) as f:
         config = json.loads(f.read())
     return web.json_response(config)
@@ -85,6 +86,14 @@ def make_app():
     app.add_routes(routes)
     aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(HERE))
     app.add_routes([web.static("/static", STATIC)])
+    aiohttp_cors.setup(
+        app,
+        defaults={
+            "*": aiohttp_cors.ResourceOptions(
+                allow_credentials=True, expose_headers="*", allow_headers="*"
+            )
+        },
+    )
     return app
 
 

@@ -7,6 +7,7 @@ install_requires = [
     "github3.py",
     "tinydb",
     "humanize",
+    "aiohttp_cors"
 ]
 
 
