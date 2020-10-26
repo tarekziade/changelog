@@ -3,7 +3,11 @@ import fnmatch
 
 def deployment(change, *options):
     message = change["message"]
-    if "*PRODUCTION*" in message or "*STAGING*" in message:
+    deploy_strings = ["*PRODUCTION*",
+                      "*STAGING*",
+                      "deploy:"
+                      ]
+    if any(s in message for s in deploy_strings):
         change["tags"] = ["deployment"]
         return change
 
